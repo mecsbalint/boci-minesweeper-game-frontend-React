@@ -3,7 +3,7 @@ function HomePage() {
 
     return (
         <>
-        Home page
+            Home page
         </>
     )
 }
