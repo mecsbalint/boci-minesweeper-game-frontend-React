@@ -20,8 +20,8 @@ function HomePage() {
     }, [isLoggedIn])
 
     async function handleNewGameClick() {
-        const responseObj = await createGame();
-        if (responseObj.status === 201 && responseObj.body?.is_succesful) {
+        const responseStatus = await createGame();
+        if (responseStatus === 201) {
             navigate("/sp-game");
         }
     }
