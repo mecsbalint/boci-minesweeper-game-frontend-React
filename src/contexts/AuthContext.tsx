@@ -45,7 +45,11 @@ export function AuthContextProvider({children} : React.PropsWithChildren) {
             user = null;
         }
         
-        user && dispatch({type: "LOGIN", payload: user});
+        if (user) {
+            dispatch({type: "LOGIN", payload: user});
+        } else {
+            dispatch({type: "LOGOUT"})
+        }
     }, []);
 
     console.log("AuthContext state: " + state);

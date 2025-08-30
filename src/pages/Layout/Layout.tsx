@@ -8,8 +8,8 @@ function Layout() {
             <div>
                 <CustomNavBar />
             </div>
-            <div className="flex justify-center bg-blue-400 rounded-box">
-                <div className="w-200">
+            <div className="flex justify-center bg-blue-400 rounded-box pt-10 pb-10">
+                <div className="w-200 h-200">
                     <Outlet />
                 </div>
             </div>
