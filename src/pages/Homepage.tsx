@@ -31,7 +31,7 @@ function HomePage() {
     }
 
     return (
-        <div className={isLoggedIn ? "" : "hidden"}>
+        <div className={`grid justify-center gap-5 ${isLoggedIn ? "" : "hidden"}`}>
             <button type="button" className="btn btn-primary" onClick={handleNewGameClick}>New Game</button>
             <button type="button" className={`btn btn-primary ${gameInProgressState ? "" : "hidden"}`} onClick={handleContinueGameClick}>Continue Game</button>
         </div>
