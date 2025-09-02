@@ -12,7 +12,7 @@ export type ApiResponse<T = any> = {
   body: T | null
 };
 
-export async function apiRequest<T>({
+export async function apiRequest<T = void>({
   url, 
   method = "GET", 
   body,

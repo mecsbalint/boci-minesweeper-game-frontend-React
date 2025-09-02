@@ -2,8 +2,10 @@
     "compilerOptions": {
     "composite": true,
     "module": "ESNext",
-    "moduleResolution": "Node",
-    "allowSyntheticDefaultImports": true
+    "moduleResolution": "nodenext",
+    "allowSyntheticDefaultImports": true,
+    "lib": ["ES2022"],
+    "forceConsistentCasingInFileNames": true
     },
     "include": ["vite.config.ts"]
 }
