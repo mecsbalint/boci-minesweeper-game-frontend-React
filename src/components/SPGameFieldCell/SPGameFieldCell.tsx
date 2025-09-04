@@ -1,4 +1,5 @@
 import { Cell, Coordinates, GameStatus } from "../../types/Game";
+import SPGameFieldCellIcon from "../SPGameFieldCellIcon/SPGameFieldCellIcon";
 
 type SPGameFieldCellProps = {
     gameState: string,
@@ -24,8 +25,6 @@ function SPGameFieldCell({gameState, coordinates, cell}: SPGameFieldCellProps) {
     ]);
 
     const color: CellColors = getColor();
-    const symbol: string = getSymbol();
-    
 
     function getColor() : CellColors {
         const index = (coordinates.x + coordinates.y) % 2 as 0 | 1
@@ -35,28 +34,14 @@ function SPGameFieldCell({gameState, coordinates, cell}: SPGameFieldCellProps) {
         return palletteRevealed.get(index) as CellColors
     }
 
-    function getSymbol() : string {
-        switch (cell.state) {
-            case "hidden":
-            case "empty":
-                return " "
-            case "mine":
-                return "M"
-            case "flagged":
-                return "F"
-            default:
-                return cell.state
-        }
-    }
-
     return (
         <td 
             key={`field-row-${coordinates.y}-cell-${coordinates.x}`} 
             data-x={coordinates.x} 
             data-y={coordinates.y} 
-            className={`text-center align-middle w-10 h-10 ${color.base} ${color.hover} ${cell.state === "hidden" && ['INITIALIZED', 'STARTED'].includes(gameState) ? "cursor-pointer" : ""}`}
+            className={`w-10 h-10 ${color.base} ${color.hover} ${cell.state === "hidden" && ['INITIALIZED', 'STARTED'].includes(gameState) ? "cursor-pointer" : ""}`}
         >
-            {symbol}
+            <SPGameFieldCellIcon cellState={cell.state}/>
         </td>
     )
 }
