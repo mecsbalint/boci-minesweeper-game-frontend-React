@@ -4,18 +4,23 @@ import { useEffect, useState } from "react";
 import SPGameField from "../components/SPGameField/SPGameField";
 import { Cell, Coordinates, GameModel, PlayerMove } from "../types/Game";
 import { createGame, getCurrentGame, makePlayerMove } from "../services/gameService";
+import { useErrorContext } from "../hooks/useErrorContext";
+import { ExceptionResponseBody } from "../types/Exception";
 
 function SPGamePage() {
     const navigate = useNavigate();
     const {isLoggedIn} = useAuthContext();
     const [game, setGame] = useState<GameModel | null>(null);
+    const {dispatch} = useErrorContext()
 
     useEffect(() => {
         if (isLoggedIn) {
             if (!game) {
                 getCurrentGame().then(response => {
                     if (response.status === 200) {
-                        setGame(response.body);
+                        setGame(response.body as GameModel);
+                    } else if (response.status >= 400 && response.status <= 599) {
+                        dispatch(response.body as ExceptionResponseBody)
                     }
                 });
             }
@@ -26,13 +31,17 @@ function SPGamePage() {
 
 
     async function handleNewGameClick() {
-        const responseStatus = await createGame();
-        if (responseStatus === 201) {
+        const responseObj = await createGame();
+        if (responseObj.status === 201) {
             getCurrentGame().then(response => {
                 if (response.status === 200) {
-                    setGame(response.body);
+                    setGame(response.body as GameModel);
+                } else if (response.status >= 400 && response.status <= 599) {
+                    dispatch(response.body as ExceptionResponseBody)
                 }
             });
+        } else if (responseObj.status >= 400 && responseObj.status <= 599) {
+            dispatch(responseObj.body as ExceptionResponseBody)
         }
     }
 
@@ -50,7 +59,9 @@ function SPGamePage() {
                 const playerMove: PlayerMove = {coordinates, action_type};
                 const responseObj = await makePlayerMove(playerMove);
                 if (responseObj.status === 200) {
-                    setGame(responseObj.body);
+                    setGame(responseObj.body as GameModel);
+                } else if (responseObj.status >= 400 && responseObj.status <= 599) {
+                    dispatch(responseObj.body as ExceptionResponseBody)
                 }
             }
         }

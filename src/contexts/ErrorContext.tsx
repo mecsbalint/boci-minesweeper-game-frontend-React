@@ -25,7 +25,7 @@ export function ErrorContextProvider({children}: PropsWithChildren) {
         if (state.isErrorActive) {
             setTimeout(() => {
                 dispatch([]);
-            }, 3000)
+            }, 5000)
         }
     }, [state]);
 
