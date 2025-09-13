@@ -24,7 +24,7 @@ export function ErrorContextProvider({children}: PropsWithChildren) {
     useEffect(() => {
         setTimeout(() => {
             dispatch([]);
-        }, 5000)
+        }, 3000)
     }, [state]);
 
     return (

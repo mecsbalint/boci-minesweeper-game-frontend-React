@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom";
 import CustomNavBar from "../../components/CustomNavBar/CustomNavBar";
+import ErrorToast from "../../components/ErrorToast/ErrorToast";
 
 function Layout() {
 
@@ -12,6 +13,9 @@ function Layout() {
                 <div className="w-200 h-200">
                     <Outlet />
                 </div>
+            </div>
+            <div>
+                <ErrorToast />
             </div>
         </div>
     )
