@@ -1,3 +1,4 @@
+import { ExceptionResponseBody } from "../types/Exception";
 import { User } from "../types/User";
 
 type ApiRequestParams = {
@@ -9,7 +10,7 @@ type ApiRequestParams = {
 
 export type ApiResponse<T = any> = {
   status: number,
-  body: T | null
+  body: T | ExceptionResponseBody | null
 };
 
 export async function apiRequest<T = void>({
@@ -33,11 +34,11 @@ export async function apiRequest<T = void>({
     ...(method !== "GET" && body ? {body} : {})
   });
 
-  if (response.status === 401) {
-    return {status: response.status, body: null};
-  }
-
   let responseBody = await response.json().catch(() => null);
+
+  if (response.status >= 400 && response.status <= 599) {
+    return {status: response.status, body: responseBody as ExceptionResponseBody};
+  }
 
   return {status: response.status, body: responseBody as T};
 }
