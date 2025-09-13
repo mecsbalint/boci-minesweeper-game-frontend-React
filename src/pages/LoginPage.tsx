@@ -7,7 +7,7 @@ import { UserRegistration } from "../types/User";
 
 function LoginPage() {
     const navigate = useNavigate();
-    const {error, isLoading, login} = useLogin();
+    const {errorEmail, errorPassword, isLoading, login} = useLogin();
     const {isLoggedIn} = useAuthContext();
 
     useEffect(() => {
@@ -28,8 +28,8 @@ function LoginPage() {
                     <UserForm 
                         submitText={"Log in"}
                         onSubmit={onSubmit}
-                        emailErrorMsg={error}
-                        passwordErrorMsg={error}
+                        emailErrorMsg={errorEmail}
+                        passwordErrorMsg={errorPassword}
                         isLoading={isLoading}
                     />  
                 </div>
