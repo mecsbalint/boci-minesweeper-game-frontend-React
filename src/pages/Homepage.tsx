@@ -3,10 +3,13 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { checkActiveGameStatus, createGame } from "../services/gameService";
 import { GameStatus } from "../types/Game";
 import { useNavigate } from "react-router-dom";
+import { useErrorContext } from "../hooks/useErrorContext";
+import { ExceptionResponseBody } from "../types/Exception";
 
 function HomePage() {
     const navigate = useNavigate()
-    const {user, isLoggedIn} = useAuthContext();
+    const {isLoggedIn} = useAuthContext();
+    const {dispatch} = useErrorContext();
     const [gameInProgressState, setGameInProgressState] = useState<boolean>(false)
 
     useEffect(() => {
@@ -14,15 +17,19 @@ function HomePage() {
             checkActiveGameStatus().then(responseObj => {
                 if (responseObj.status === 200) {
                     setGameInProgressState((responseObj.body as GameStatus).status)
+                } else if (responseObj.status >= 400 && responseObj.status <= 599) {
+                    dispatch(responseObj.body as ExceptionResponseBody)
                 }
             })
         }
     }, [isLoggedIn])
 
     async function handleNewGameClick() {
-        const responseStatus = await createGame();
-        if (responseStatus === 201) {
+        const responseObj = await createGame();
+        if (responseObj.status === 201) {
             navigate("/sp-game");
+        } else if (responseObj.status >= 400 && responseObj.status <= 599) {
+            dispatch(responseObj.body as ExceptionResponseBody)
         }
     }
 

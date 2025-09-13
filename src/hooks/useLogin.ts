@@ -2,36 +2,42 @@ import { useNavigate } from "react-router-dom";
 import { loginUser } from "../services/userService";
 import {useAuthContext} from "./useAuthContext";
 import { useState } from "react";
-import { UserLogin } from "../types/User";
+import { UserLogin, User } from "../types/User";
+import { ExceptionResponseBody } from "../types/Exception";
 
 type UseLoginResult = {
-    error: "" | "Incorrect email or password!",
+    errorEmail: string,
+    errorPassword: string,
     isLoading: boolean | null,
     login: (submitObj: UserLogin) => Promise<void>
-}
+};
 
 export function useLogin() : UseLoginResult {
     const [isLoading, setIsLoading] = useState<boolean | null>(null);
-    const [error, setError] = useState<"" | "Incorrect email or password!">("");
+    const [errorEmail, setErrorEmail] = useState<string>("");
+    const [errorPassword, setErrorPassword] = useState<string>("");
     const navigate = useNavigate();
     const {dispatch} = useAuthContext();
 
     async function login(submitObj : UserLogin) {
         setIsLoading(true);
-        setError("");
+        setErrorEmail("");
+        setErrorPassword("");
 
-        const response = await loginUser(submitObj);
+        const responseObj = await loginUser(submitObj);
         
-        if (response.status === 401) {
-            setError("Incorrect email or password!");
-        } else if (response.status === 200 && response.body) {
-            localStorage.setItem("bmgUser", JSON.stringify(response.body));
-            dispatch({type: "LOGIN", payload: response.body});
+        if (responseObj.status === 404) {
+            setErrorEmail((responseObj.body as ExceptionResponseBody)[0].message);
+        } else if (responseObj.status === 401) {
+            setErrorPassword((responseObj.body as ExceptionResponseBody)[0].message);
+        } else if (responseObj.status === 200 && responseObj.body) {
+            localStorage.setItem("bmgUser", JSON.stringify(responseObj.body));
+            dispatch({type: "LOGIN", payload: (responseObj.body as User)});
             navigate("/");
         }
         
         setIsLoading(false);
     }
 
-    return {error, isLoading, login};
+    return {errorEmail, errorPassword, isLoading, login};
 }

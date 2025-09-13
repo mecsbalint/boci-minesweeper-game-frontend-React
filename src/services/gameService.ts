@@ -1,30 +1,35 @@
 import { GameModel, GameResponse, GameStatus, PlayerMove } from "../types/Game";
 import { apiRequest, ApiResponse } from "./apiRequest";
+import { ExceptionResponseBody } from "../types/Exception";
+
 
 export async function checkActiveGameStatus() : Promise<ApiResponse<GameStatus>> {
     const responseObj = await apiRequest<GameStatus>({url: "api/game/active"});
     return responseObj;
 }
 
-export async function createGame() : Promise<number> {
+export async function createGame() : Promise<ApiResponse<void>> {
     const responseObj = await apiRequest({url: "api/game", method: "POST"});
-    return responseObj.status;
+    return responseObj;
 }
 
 export async function getCurrentGame() : Promise<ApiResponse<GameModel>> {
     const responseObj = await apiRequest<GameResponse>({url: "api/game"})
-    if (responseObj.body === null) {
-        return responseObj as unknown as ApiResponse<GameModel>;
+    
+    if (responseObj.status === 200) {
+        return {status: responseObj.status, body: createGameModelFromGameResponse(responseObj.body as GameResponse)};
+    } else {
+        return responseObj as unknown as ApiResponse<GameModel>
     }
-    return {status: responseObj.status, body: createGameModelFromGameResponse(responseObj.body)};
 }
 
 export async function makePlayerMove(playerMove: PlayerMove) : Promise<ApiResponse<GameModel>> {
     const responseObj = await apiRequest<GameResponse>({url: "api/game", method: "PATCH", headers: {"Content-Type": "application/json"}, body: JSON.stringify(playerMove)});
-    if (responseObj.body === null) {
-        return responseObj as unknown as ApiResponse<GameModel>;
+    if (responseObj.status === 200) {
+        return {status: responseObj.status, body: createGameModelFromGameResponse(responseObj.body as GameResponse)};
+    } else {
+        return responseObj as unknown as ApiResponse<GameModel>
     }
-    return {status: responseObj.status, body: createGameModelFromGameResponse(responseObj.body)};
 }
 
 function createGameModelFromGameResponse(gameResponse: GameResponse) : GameModel {
