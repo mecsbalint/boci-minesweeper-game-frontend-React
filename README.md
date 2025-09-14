@@ -1,4 +1,4 @@
-# BMG Frontens (React) project
+# BMG Frontend (React) project
 
 ## About the Project
 
