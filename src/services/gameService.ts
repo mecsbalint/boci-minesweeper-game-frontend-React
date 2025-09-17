@@ -4,17 +4,17 @@ import { ExceptionResponseBody } from "../types/Exception";
 
 
 export async function checkActiveGameStatus() : Promise<ApiResponse<GameStatus>> {
-    const responseObj = await apiRequest<GameStatus>({url: "api/game/active"});
+    const responseObj = await apiRequest<GameStatus>({url: "api/game/sp/active"});
     return responseObj;
 }
 
 export async function createGame() : Promise<ApiResponse<void>> {
-    const responseObj = await apiRequest({url: "api/game", method: "POST"});
+    const responseObj = await apiRequest({url: "api/game/sp", method: "POST"});
     return responseObj;
 }
 
 export async function getCurrentGame() : Promise<ApiResponse<GameModel>> {
-    const responseObj = await apiRequest<GameResponse>({url: "api/game"})
+    const responseObj = await apiRequest<GameResponse>({url: "api/game/sp"})
     
     if (responseObj.status === 200) {
         return {status: responseObj.status, body: createGameModelFromGameResponse(responseObj.body as GameResponse)};
@@ -24,7 +24,7 @@ export async function getCurrentGame() : Promise<ApiResponse<GameModel>> {
 }
 
 export async function makePlayerMove(playerMove: PlayerMove) : Promise<ApiResponse<GameModel>> {
-    const responseObj = await apiRequest<GameResponse>({url: "api/game", method: "PATCH", headers: {"Content-Type": "application/json"}, body: JSON.stringify(playerMove)});
+    const responseObj = await apiRequest<GameResponse>({url: "api/game/sp", method: "PATCH", headers: {"Content-Type": "application/json"}, body: JSON.stringify(playerMove)});
     if (responseObj.status === 200) {
         return {status: responseObj.status, body: createGameModelFromGameResponse(responseObj.body as GameResponse)};
     } else {
