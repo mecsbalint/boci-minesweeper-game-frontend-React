@@ -6,6 +6,7 @@ type GameFieldCellProps = {
     coorX: number,
     coorY: number,
     cellState: CellState
+    processClickEvent: (event: React.MouseEvent) => void
 };
 
 type CellColors = {
@@ -15,7 +16,7 @@ type CellColors = {
 
 type CellColorScheme = Map<0 | 1, CellColors>
 
-function GameFieldCell({gameState, coorX, coorY, cellState}: GameFieldCellProps) {
+function GameFieldCell({gameState, coorX, coorY, cellState, processClickEvent}: GameFieldCellProps) {
     const palletteHidden: CellColorScheme = new Map([
         [0, {base: "bg-neutral-400", hover: "hover:bg-neutral-300"}],
         [1, {base: "bg-neutral-200", hover: "hover:bg-neutral-100"}]
@@ -49,6 +50,8 @@ function GameFieldCell({gameState, coorX, coorY, cellState}: GameFieldCellProps)
             data-y={coorY} 
             data-state={cellState}
             className={`w-10 h-10 ${color.base} ${color.hover} ${cellState === "hidden" && ["READY", "ACTIVE"].includes(gameState) ? "cursor-pointer" : ""}`}
+            onClick={processClickEvent}
+            onContextMenu={processClickEvent}
         >
             <SPGameFieldCellIcon cellState={cellState}/>
         </td>
