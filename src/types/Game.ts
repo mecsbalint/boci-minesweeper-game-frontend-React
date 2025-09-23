@@ -5,7 +5,7 @@ export type GameStatus = {
 
 export type PlayerMove = {
     coordinates: Coordinates
-    action_type: "REVEAL" | "FLAG"
+    actionType: "REVEAL" | "FLAG"
 };
 
 export type Coordinates = {
@@ -19,4 +19,4 @@ export type Match = {
     board: CellState[][]
 };
 
-export type CellState = "void" | "flag" | "hidden" | "empty" | "mine" | "mine_activated" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | `opponent_${string}`;
+export type CellState = "void" | "flagged" | "hidden" | "empty" | "mine" | "mine_activated" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | `opponent_${string}`;

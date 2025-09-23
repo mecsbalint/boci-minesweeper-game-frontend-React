@@ -1,10 +1,10 @@
 import React from "react";
-import { Cell, Coordinates, GameModel } from "../../types/Game";
+import { Cell, CellState, Coordinates, GameModel } from "../../types/Game";
 import GameFieldCell from "../GameFieldCell/GameFieldCell";
 
 type GameFieldProps = {
     game: GameModel,
-    clickHandler: (coordinates: Coordinates, mouseButton: 0 | 2) => Promise<void>
+    clickHandler: (actionCellState: CellState, coordinates: Coordinates, mouseButton: 0 | 2) => Promise<void>
 };
 
 function GameField({game, clickHandler} : GameFieldProps) {

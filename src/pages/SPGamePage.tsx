@@ -2,23 +2,23 @@ import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useEffect, useState } from "react";
 import GameField from "../components/GameField/GameField";
-import { Cell, Coordinates, GameModel, PlayerMove } from "../types/Game";
+import { CellState, Coordinates, Match, PlayerMove } from "../types/Game";
 import { createGame, getCurrentGame, makePlayerMove } from "../services/gameService";
 import { useErrorContext } from "../hooks/useErrorContext";
 import { ExceptionResponseBody } from "../types/Exception";
 
 function SPGamePage() {
     const navigate = useNavigate();
-    const {isLoggedIn} = useAuthContext();
-    const [game, setGame] = useState<GameModel | null>(null);
+    const {isLoggedIn, user} = useAuthContext();
+    const [match, setMatch] = useState<Match | null>(null);
     const {dispatch} = useErrorContext()
 
     useEffect(() => {
         if (isLoggedIn) {
-            if (!game) {
+            if (!match) {
                 getCurrentGame().then(response => {
                     if (response.status === 200) {
-                        setGame(response.body as GameModel);
+                        setMatch(response.body as Match);
                     } else if (response.status >= 400 && response.status <= 599) {
                         dispatch(response.body as ExceptionResponseBody)
                     }
@@ -35,7 +35,7 @@ function SPGamePage() {
         if (responseObj.status === 201) {
             getCurrentGame().then(response => {
                 if (response.status === 200) {
-                    setGame(response.body as GameModel);
+                    setMatch(response.body as Match);
                 } else if (response.status >= 400 && response.status <= 599) {
                     dispatch(response.body as ExceptionResponseBody)
                 }
@@ -45,21 +45,15 @@ function SPGamePage() {
         }
     }
 
-    async function clickHandler(coordinates: Coordinates, mouseButton: 0 | 2) : Promise<void> {
-        if (game?.state && ['INITIALIZED', 'STARTED'].includes(game?.state)) {
-            const action_type = mouseButton === 0 ? "REVEAL" : "FLAG";
+    async function clickHandler(actionCellState: CellState, coordinates: Coordinates, mouseButton: 0 | 2) : Promise<void> {
+        if (match?.state && ['READY', 'ACTIVE'].includes(match?.state)) {
+            const actionType = mouseButton === 0 ? "REVEAL" : "FLAG";
     
-            const key = game?.cells.keys().find(coor => coor.x === coordinates.x && coor.y === coordinates.y);
-            let actionCell: Cell | undefined;
-            if (key) {
-                actionCell = game?.cells.get(key);
-            }
-    
-            if (actionCell?.state === "hidden" || (actionCell?.state === "flagged" && action_type === "FLAG")) {
-                const playerMove: PlayerMove = {coordinates, action_type};
+            if (actionCellState === "hidden" || (actionCellState === "flagged" && actionType === "FLAG")) {
+                const playerMove: PlayerMove = {coordinates, actionType: actionType};
                 const responseObj = await makePlayerMove(playerMove);
                 if (responseObj.status === 200) {
-                    setGame(responseObj.body as GameModel);
+                    setMatch(responseObj.body as Match);
                 } else if (responseObj.status >= 400 && responseObj.status <= 599) {
                     dispatch(responseObj.body as ExceptionResponseBody)
                 }
@@ -67,17 +61,17 @@ function SPGamePage() {
         }
     }
 
-    return game !== null ? (
+    return match !== null ? (
             <>
             <div>
                 <GameField
-                    game={game}
+                    game={match}
                     clickHandler={clickHandler}
                 />
             </div>
-            <div className={`text-center ${game.state === "FINISHED_LOST" || game.state === "FINISHED_WON" ? "" : "hidden"}`}>
+            <div className={`text-center ${match.state === "FINISHED" ? "" : "hidden"}`}>
                 <p className="text-white p-5 text-xl">
-                    {game.state === "FINISHED_LOST" ? "You Lost" : "You Won"}
+                    {match.winnerId === user?.id ? "You Won" : "You Lost"}
                 </p>
                 <button type="button" className="btn btn-primary" onClick={handleNewGameClick}>New Game</button>
             </div>
