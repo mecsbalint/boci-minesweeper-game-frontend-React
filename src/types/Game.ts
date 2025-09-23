@@ -14,9 +14,11 @@ export type Coordinates = {
 };
 
 export type Match = {
-    state: "CREATED" | "WAITING" | "READY" | "ACTIVE" | "FINISHED",
+    state: GameState,
     winnerId: number | null,
     board: CellState[][]
 };
+
+export type GameState =  "CREATED" | "WAITING" | "READY" | "ACTIVE" | "FINISHED";
 
 export type CellState = "void" | "flagged" | "hidden" | "empty" | "mine" | "mine_activated" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | `opponent_${string}`;

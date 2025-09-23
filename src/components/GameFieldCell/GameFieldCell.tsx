@@ -1,10 +1,11 @@
-import { Cell, Coordinates } from "../../types/Game";
+import { CellState, GameState } from "../../types/Game";
 import SPGameFieldCellIcon from "../SPGameFieldCellIcon/SPGameFieldCellIcon";
 
 type GameFieldCellProps = {
-    gameState: string,
-    coordinates: Coordinates,
-    cell: Cell
+    gameState: GameState,
+    coorX: number,
+    coorY: number,
+    cellState: CellState
 };
 
 type CellColors = {
@@ -14,7 +15,7 @@ type CellColors = {
 
 type CellColorScheme = Map<0 | 1, CellColors>
 
-function GameFieldCell({gameState, coordinates, cell}: GameFieldCellProps) {
+function GameFieldCell({gameState, coorX, coorY, cellState}: GameFieldCellProps) {
     const palletteHidden: CellColorScheme = new Map([
         [0, {base: "bg-neutral-400", hover: "hover:bg-neutral-300"}],
         [1, {base: "bg-neutral-200", hover: "hover:bg-neutral-100"}]
@@ -27,8 +28,8 @@ function GameFieldCell({gameState, coordinates, cell}: GameFieldCellProps) {
     const color: CellColors = getColor();
 
     function getColor() : CellColors {
-        const index = (coordinates.x + coordinates.y) % 2 as 0 | 1
-        if (cell.state === "hidden") {
+        const index = (coorX + coorY) % 2 as 0 | 1
+        if (cellState === "hidden") {
             return palletteHidden.get(index) as CellColors;
         }
         return palletteRevealed.get(index) as CellColors
@@ -36,12 +37,13 @@ function GameFieldCell({gameState, coordinates, cell}: GameFieldCellProps) {
 
     return (
         <td 
-            key={`field-row-${coordinates.y}-cell-${coordinates.x}`} 
-            data-x={coordinates.x} 
-            data-y={coordinates.y} 
-            className={`w-10 h-10 ${color.base} ${color.hover} ${cell.state === "hidden" && ['INITIALIZED', 'STARTED'].includes(gameState) ? "cursor-pointer" : ""}`}
+            key={`field-row-${coorY}-cell-${coorX}`} 
+            data-x={coorX} 
+            data-y={coorY} 
+            data-state={cellState}
+            className={`w-10 h-10 ${color.base} ${color.hover} ${cellState === "hidden" && ["READY", "ACTIVE"].includes(gameState) ? "cursor-pointer" : ""}`}
         >
-            <SPGameFieldCellIcon cellState={cell.state}/>
+            <SPGameFieldCellIcon cellState={cellState}/>
         </td>
     )
 }

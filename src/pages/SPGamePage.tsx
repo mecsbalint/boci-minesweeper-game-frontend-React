@@ -65,7 +65,7 @@ function SPGamePage() {
             <>
             <div>
                 <GameField
-                    game={match}
+                    match={match}
                     clickHandler={clickHandler}
                 />
             </div>
