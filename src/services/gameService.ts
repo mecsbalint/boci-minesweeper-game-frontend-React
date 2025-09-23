@@ -1,6 +1,5 @@
-import { GameModel, GameResponse, GameStatus, PlayerMove } from "../types/Game";
+import { GameStatus, PlayerMove } from "../types/Game";
 import { apiRequest, ApiResponse } from "./apiRequest";
-import { ExceptionResponseBody } from "../types/Exception";
 
 
 export async function checkActiveGameStatus() : Promise<ApiResponse<GameStatus>> {

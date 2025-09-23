@@ -1,13 +1,13 @@
 import React from "react";
 import { Cell, Coordinates, GameModel } from "../../types/Game";
-import SPGameFieldCell from "../SPGameFieldCell/SPGameFieldCell";
+import GameFieldCell from "../GameFieldCell/GameFieldCell";
 
-type SPGameFieldProps = {
+type GameFieldProps = {
     game: GameModel,
     clickHandler: (coordinates: Coordinates, mouseButton: 0 | 2) => Promise<void>
 };
 
-function SPGameField({game, clickHandler} : SPGameFieldProps) {
+function GameField({game, clickHandler} : GameFieldProps) {
     const field = createField(game.cells);
 
     function processClickEvent(event: React.MouseEvent) {
@@ -26,7 +26,7 @@ function SPGameField({game, clickHandler} : SPGameFieldProps) {
         <div className="place-items-center">
            <table onClick={processClickEvent} onContextMenu={processClickEvent}>
                 {
-                    field.map((row, i) => <tr key={"field-row-" + i}>{row.map(([coor, cell]) => <SPGameFieldCell gameState={game.state} coordinates={coor} cell={cell}/>)}</tr>)
+                    field.map((row, i) => <tr key={"field-row-" + i}>{row.map(([coor, cell]) => <GameFieldCell gameState={game.state} coordinates={coor} cell={cell}/>)}</tr>)
                 }
            </table>
         </div>
@@ -41,4 +41,4 @@ function createField(cells: Map<Coordinates, Cell>) : [Coordinates, Cell][][] {
     return field;
 }
 
-export default SPGameField;
+export default GameField;

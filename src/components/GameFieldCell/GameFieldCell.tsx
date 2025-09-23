@@ -1,7 +1,7 @@
-import { Cell, Coordinates, GameStatus } from "../../types/Game";
+import { Cell, Coordinates } from "../../types/Game";
 import SPGameFieldCellIcon from "../SPGameFieldCellIcon/SPGameFieldCellIcon";
 
-type SPGameFieldCellProps = {
+type GameFieldCellProps = {
     gameState: string,
     coordinates: Coordinates,
     cell: Cell
@@ -14,7 +14,7 @@ type CellColors = {
 
 type CellColorScheme = Map<0 | 1, CellColors>
 
-function SPGameFieldCell({gameState, coordinates, cell}: SPGameFieldCellProps) {
+function GameFieldCell({gameState, coordinates, cell}: GameFieldCellProps) {
     const palletteHidden: CellColorScheme = new Map([
         [0, {base: "bg-neutral-400", hover: "hover:bg-neutral-300"}],
         [1, {base: "bg-neutral-200", hover: "hover:bg-neutral-100"}]
@@ -47,4 +47,4 @@ function SPGameFieldCell({gameState, coordinates, cell}: SPGameFieldCellProps) {
 }
 
 
-export default SPGameFieldCell;
+export default GameFieldCell;

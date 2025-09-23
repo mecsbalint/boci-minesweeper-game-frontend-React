@@ -1,7 +1,8 @@
 
 export type User = {
     jwt: string,
-    name: string
+    name: string,
+    id: number
 }
 
 export type UserLogin = {

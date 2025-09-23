@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useEffect, useState } from "react";
-import SPGameField from "../components/SPGameField/SPGameField";
+import GameField from "../components/GameField/GameField";
 import { Cell, Coordinates, GameModel, PlayerMove } from "../types/Game";
 import { createGame, getCurrentGame, makePlayerMove } from "../services/gameService";
 import { useErrorContext } from "../hooks/useErrorContext";
@@ -70,7 +70,7 @@ function SPGamePage() {
     return game !== null ? (
             <>
             <div>
-                <SPGameField
+                <GameField
                     game={game}
                     clickHandler={clickHandler}
                 />
