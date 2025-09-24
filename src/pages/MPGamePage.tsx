@@ -1,5 +1,7 @@
+import { useState } from "react";
 
 function MPGamePage() {
+    const [list, setList] = useState<string[]>([])
 
     return (
         <div className="place-items-center">
