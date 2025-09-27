@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuthContext } from "../hooks/useAuthContext";
-import { checkActiveGameStatus, createGame } from "../services/gameService";
+import { checkActiveMPGameStatus, checkActiveSPGameStatus, createMPGame, createSPGame } from "../services/gameService";
 import { GameStatus } from "../types/Game";
 import { useNavigate } from "react-router-dom";
 import { useErrorContext } from "../hooks/useErrorContext";
@@ -10,13 +10,21 @@ function HomePage() {
     const navigate = useNavigate()
     const {isLoggedIn} = useAuthContext();
     const {dispatch} = useErrorContext();
-    const [gameInProgressState, setGameInProgressState] = useState<boolean>(false)
+    const [SPGameInProgressState, setSPGameInProgressState] = useState<boolean>(false);
+    const [MPGameInProgressState, setMPGameInProgressState] = useState<boolean>(false);
 
     useEffect(() => {
         if (isLoggedIn) {
-            checkActiveGameStatus().then(responseObj => {
+            checkActiveSPGameStatus().then(responseObj => {
                 if (responseObj.status === 200) {
-                    setGameInProgressState((responseObj.body as GameStatus).status)
+                    setSPGameInProgressState((responseObj.body as GameStatus).status)
+                } else if (responseObj.status >= 400 && responseObj.status <= 599) {
+                    dispatch(responseObj.body as ExceptionResponseBody)
+                }
+            })
+            checkActiveMPGameStatus().then(responseObj => {
+                if (responseObj.status === 200) {
+                    setMPGameInProgressState((responseObj.body as GameStatus).status)
                 } else if (responseObj.status >= 400 && responseObj.status <= 599) {
                     dispatch(responseObj.body as ExceptionResponseBody)
                 }
@@ -24,8 +32,8 @@ function HomePage() {
         }
     }, [isLoggedIn])
 
-    async function handleNewGameClick() {
-        const responseObj = await createGame();
+    async function handleNewSPGameClick() {
+        const responseObj = await createSPGame();
         if (responseObj.status === 201) {
             navigate("/sp-game");
         } else if (responseObj.status >= 400 && responseObj.status <= 599) {
@@ -33,14 +41,29 @@ function HomePage() {
         }
     }
 
-    function handleContinueGameClick() {
+    async function handleNewMPGameClick() {
+        const responseObj = await createMPGame();
+        if (responseObj.status === 201) {
+            navigate("/mp-game");
+        } else if (responseObj.status >= 400 && responseObj.status <= 599) {
+            dispatch(responseObj.body as ExceptionResponseBody)
+        }
+    }
+
+    function handleContinueSPGameClick() {
         navigate("/sp-game");
+    }
+
+    function handleContinueMPGameClick() {
+        navigate("/mp-game");
     }
 
     return (
         <div className={`grid justify-center gap-5 ${isLoggedIn ? "" : "hidden"}`}>
-            <button type="button" className="btn btn-primary" onClick={handleNewGameClick}>New Game</button>
-            <button type="button" className={`btn btn-primary ${gameInProgressState ? "" : "hidden"}`} onClick={handleContinueGameClick}>Continue Game</button>
+            <button type="button" className="btn btn-primary" onClick={handleNewSPGameClick}>New Single Player Game</button>
+            <button type="button" className={`btn btn-primary ${SPGameInProgressState ? "" : "hidden"}`} onClick={handleContinueSPGameClick}>Continue Single Player Game</button>
+            <button type="button" className="btn btn-primary" onClick={handleNewMPGameClick}>New Multiplayer Game</button>
+            <button type="button" className={`btn btn-primary ${MPGameInProgressState ? "" : "hidden"}`} onClick={handleContinueMPGameClick}>Continue Multiplayer Game</button>
         </div>
     )
 }

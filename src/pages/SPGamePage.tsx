@@ -3,7 +3,7 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { useEffect, useState } from "react";
 import GameField from "../components/GameField/GameField";
 import { CellState, Coordinates, Match, PlayerMove } from "../types/Game";
-import { createGame, getCurrentGame, makePlayerMove } from "../services/gameService";
+import { createSPGame, getCurrentGame, makePlayerMove } from "../services/gameService";
 import { useErrorContext } from "../hooks/useErrorContext";
 import { ExceptionResponseBody } from "../types/Exception";
 
@@ -31,7 +31,7 @@ function SPGamePage() {
 
 
     async function handleNewGameClick() {
-        const responseObj = await createGame();
+        const responseObj = await createSPGame();
         if (responseObj.status === 201) {
             getCurrentGame().then(response => {
                 if (response.status === 200) {

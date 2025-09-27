@@ -2,13 +2,23 @@ import { GameStatus, PlayerMove, Match } from "../types/Game";
 import { apiRequest, ApiResponse } from "./apiRequest";
 
 
-export async function checkActiveGameStatus() : Promise<ApiResponse<GameStatus>> {
+export async function checkActiveSPGameStatus() : Promise<ApiResponse<GameStatus>> {
     const responseObj = await apiRequest<GameStatus>({url: "api/game/sp/active"});
     return responseObj;
 }
 
-export async function createGame() : Promise<ApiResponse<void>> {
+export async function createSPGame() : Promise<ApiResponse<void>> {
     const responseObj = await apiRequest({url: "api/game/sp", method: "POST"});
+    return responseObj;
+}
+
+export async function checkActiveMPGameStatus() : Promise<ApiResponse<GameStatus>> {
+    const responseObj = await apiRequest<GameStatus>({url: "api/game/mp/active"});
+    return responseObj;
+}
+
+export async function createMPGame() : Promise<ApiResponse<void>> {
+    const responseObj = await apiRequest({url: "api/game/mp", method: "POST"});
     return responseObj;
 }
 
