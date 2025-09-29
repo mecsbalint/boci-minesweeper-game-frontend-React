@@ -3,6 +3,12 @@ export type GameStatus = {
     status: boolean
 };
 
+export type MatchLobbyDto = {
+    id: string,
+    emptySeats: number
+
+}
+
 export type PlayerMove = {
     coordinates: Coordinates
     actionType: "REVEAL" | "FLAG"

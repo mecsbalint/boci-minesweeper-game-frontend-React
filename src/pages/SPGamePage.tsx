@@ -45,19 +45,12 @@ function SPGamePage() {
         }
     }
 
-    async function clickHandler(actionCellState: CellState, coordinates: Coordinates, mouseButton: 0 | 2) : Promise<void> {
-        if (match?.state && ['READY', 'ACTIVE'].includes(match?.state)) {
-            const actionType = mouseButton === 0 ? "REVEAL" : "FLAG";
-    
-            if (actionCellState === "hidden" || (actionCellState === "flagged" && actionType === "FLAG")) {
-                const playerMove: PlayerMove = {coordinates, actionType: actionType};
-                const responseObj = await makePlayerMove(playerMove);
-                if (responseObj.status === 200) {
-                    setMatch(responseObj.body as Match);
-                } else if (responseObj.status >= 400 && responseObj.status <= 599) {
-                    dispatch(responseObj.body as ExceptionResponseBody)
-                }
-            }
+    async function clickHandler(playerMove: PlayerMove) : Promise<void> {
+        const responseObj = await makePlayerMove(playerMove);
+        if (responseObj.status === 200) {
+            setMatch(responseObj.body as Match);
+        } else if (responseObj.status >= 400 && responseObj.status <= 599) {
+            dispatch(responseObj.body as ExceptionResponseBody)
         }
     }
 

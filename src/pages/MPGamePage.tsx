@@ -1,41 +1,65 @@
 import { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import { io, Socket } from "socket.io-client"
+import { useAuthContext } from "../hooks/useAuthContext";
+import { Match, PlayerMove } from "../types/Game";
+import GameField from "../components/GameField/GameField";
 
 function MPGamePage() {
-    const [list, setList] = useState<string[]>([]);
+    const id = useParams().id as unknown as string;
+    const {isLoggedIn, user} = useAuthContext();
     const [socket, setSocket] = useState<Socket | null>(null);
-    const [room, setRoom] = useState<"room1" | "room2" | null>(null)
+    const [match, setMatch] = useState<Match | null>(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
-        const socket = io("http://localhost:5000");
-        setSocket(socket)
+        if (isLoggedIn === false) {
+            navigate("/login");
+        }
 
-        socket.on("connect", () => console.log("connected"));
-        socket.on("mp_game_event", data => setList(prev => [...prev, data]));
-        socket.on("disconnect", () => console.log("disconnected"));
+        const socket = io("http://localhost:5000", {auth: {jwt: user?.jwt}});
+        setSocket(socket);
 
-        return () => {
-            socket.disconnect();
-        };
+        socket.on("current_game_state", data => setMatch(data));
+
+        if (id) {
+            socket.emit("join_game", {id: id});
+        } else {
+            socket.emit("rejoin_game");
+        }
     }, []);
 
-    function sendButtonInput() {
-        if (socket && room) {
-            socket.emit("mp_game_event", {msg: `Button pressed: ${Date.now()}`, room: room})
-        }
+
+    async function clickHandler(playerMove: PlayerMove) {
+        socket?.emit("make_player_move", playerMove);
     }
 
-    return (
-        <div className="place-items-center">
-            Multiplayer Game Page
-            <ul>
-                {list.map(element => <li key={element}>{element}</li>)}
-            </ul>
-            <button type="button" className="btn btn-primary" onClick={sendButtonInput}>Add to the list</button>
-            <button type="button" className="btn btn-primary" onClick={() => setRoom("room1")}>Join room1</button>
-            <button type="button" className="btn btn-primary" onClick={() => setRoom("room2")}>Join room2</button>
-        </div>
-    )
+    function handleLeaveGameClick() {
+        socket?.emit("leave_game");
+        navigate("/");
+    }
+
+    return match !== null ? (
+            <>
+            <div>
+                <GameField
+                    match={match}
+                    clickHandler={clickHandler}
+                />
+                <p className={match?.state === "WAITING" ? "" : "hidden"}>Waiting for players</p>
+            </div>
+            <div className={`text-center ${match.state === "FINISHED" ? "" : "hidden"}`}>
+                <p className="text-white p-5 text-xl">
+                    {match.winnerId === user?.id ? "You Won" : "You Lost"}
+                </p>
+                <button type="button" className="btn btn-primary" onClick={handleLeaveGameClick}>Leave Game</button>
+            </div>
+            </>
+        ) : (
+            <div>
+                Loading
+            </div>
+        );
 }
 
 export default MPGamePage;

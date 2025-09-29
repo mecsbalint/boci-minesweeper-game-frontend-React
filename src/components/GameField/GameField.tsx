@@ -1,10 +1,10 @@
 import React from "react";
-import { CellState, Coordinates, Match } from "../../types/Game";
+import { CellState, Coordinates, Match, PlayerMove } from "../../types/Game";
 import GameFieldCell from "../GameFieldCell/GameFieldCell";
 
 type GameFieldProps = {
     match: Match,
-    clickHandler: (actionCellState: CellState, coordinates: Coordinates, mouseButton: 0 | 2) => Promise<void>
+    clickHandler: (playerMove: PlayerMove) => Promise<void>
 };
 
 function GameField({match, clickHandler} : GameFieldProps) {
@@ -19,8 +19,13 @@ function GameField({match, clickHandler} : GameFieldProps) {
             const y = parseInt(target.dataset.y ?? "");
             const state = target.dataset.state ?? "";
 
-            if (!isNaN(x) && !isNaN(y) && state) {
-                clickHandler(state as CellState, {x, y}, event.button)
+            if (!isNaN(x) && !isNaN(y) && state && match?.state && ['READY', 'ACTIVE'].includes(match?.state)) {
+                const coordinates: Coordinates = {x, y}
+                const actionType = event.button === 0 ? "REVEAL" : "FLAG";
+                if (state === "hidden" || (state === "flagged" && actionType === "FLAG")) {
+                    const playerMove: PlayerMove = {coordinates, actionType: actionType};
+                    clickHandler(playerMove);
+                }
             }
         }
     }

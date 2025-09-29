@@ -30,7 +30,7 @@ const router = createBrowserRouter([
         element: <SPGamePage />
       },
       {
-        path: "/mp-game",
+        path: "/mp-game/:id",
         element: <MPGamePage />
       },
       {
