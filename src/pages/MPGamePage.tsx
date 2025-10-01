@@ -32,7 +32,6 @@ function MPGamePage() {
             socket.emit("join_game", {id: id});
         }
 
-        // return () => socket.disconnect();        
     }, [user?.jwt, id]);
 
 
