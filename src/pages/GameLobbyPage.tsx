@@ -15,7 +15,7 @@ function GameLobbyPage() {
             navigate("/login");
         }
 
-        const socket = io("http://localhost:5000", {auth: {jwt: user?.jwt}});
+        const socket = io("/", {auth: {jwt: user?.jwt}});
         setSocket(socket);
 
         socket.on("lobby_update", data => setMatches(data));

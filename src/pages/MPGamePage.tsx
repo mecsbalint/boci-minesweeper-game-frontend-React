@@ -21,7 +21,7 @@ function MPGamePage() {
     useEffect(() => {
         if (!user?.jwt || id === undefined) return;
 
-        const socket = io("http://localhost:5000", {auth: {jwt: user.jwt}});
+        const socket = io("/", {auth: {jwt: user.jwt}});
         setSocket(socket);
         
         socket.on("current_game_state", data => setMatch(data));
