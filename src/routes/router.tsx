@@ -4,6 +4,8 @@ import Layout from "../pages/Layout/Layout";
 import RegistrationPage from "../pages/RegistrationPage";
 import LoginPage from "../pages/LoginPage";
 import SPGamePage from "../pages/SPGamePage";
+import MPGamePage from "../pages/MPGamePage";
+import GameLobbyPage from "../pages/GameLobbyPage";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +28,14 @@ const router = createBrowserRouter([
       {
         path: "/sp-game",
         element: <SPGamePage />
+      },
+      {
+        path: "/mp-game/:id",
+        element: <MPGamePage />
+      },
+      {
+        path: "/lobby",
+        element: <GameLobbyPage />
       },
     ],
   },

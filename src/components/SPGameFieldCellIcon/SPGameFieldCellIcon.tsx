@@ -1,14 +1,7 @@
-import { FaBomb } from "react-icons/fa";
 import { CellState } from "../../types/Game";
-import { RiTriangularFlagFill } from "react-icons/ri";
-import { RiNumber1 } from "react-icons/ri";
-import { RiNumber2 } from "react-icons/ri";
-import { RiNumber3 } from "react-icons/ri";
-import { RiNumber4 } from "react-icons/ri";
-import { RiNumber5 } from "react-icons/ri";
-import { RiNumber6 } from "react-icons/ri";
-import { RiNumber7 } from "react-icons/ri";
-import { RiNumber8 } from "react-icons/ri";
+import { FaBomb } from "react-icons/fa";
+import { FaExplosion } from "react-icons/fa6"
+import { RiTriangularFlagFill, RiNumber1, RiNumber2, RiNumber3, RiNumber4, RiNumber5, RiNumber6, RiNumber7, RiNumber8 } from "react-icons/ri";
 
 type SPGameFieldCellIconProps = {
     cellState: CellState
@@ -19,6 +12,8 @@ function SPGameFieldCellIcon({cellState}: SPGameFieldCellIconProps) {
     switch (cellState) {
         case "mine":
             return <FaBomb className="mx-auto" />
+        case "mine_activated":
+            return <FaExplosion className="mx-auto" />
         case "flagged":
             return <RiTriangularFlagFill className="mx-auto" />
         case "1":

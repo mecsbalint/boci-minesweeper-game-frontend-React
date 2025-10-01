@@ -18,11 +18,16 @@ Or alternatively clone the repository: ```git clone https://github.com/mecsbalin
 
 #### Installation
 
+
+
 1. **Install dependencies**
     1. Open a terminal and navigate to the root directory
     2. Run the `npm install` command (install dependencies)
-2. **Access the Application**
-    1. Click on the `Local` link in the terminal where the frontend is running.
+2. **Rename `.env.example` to `.env`**
+3. **Access the Application**
+    1. Optionally change the `VITE_BACKEND_URI` variable in `.env` (it doesn't necessary if you start this frontend server on the same device: [BMG Backend (Flask) GitHub page](https://github.com/mecsbalint/boci-minesweeper-game-backend-python))
+    2. Run the `npm run dev` command
+    3. Click on the `Local` link in the terminal where the frontend is running.
 
 #### Run
 

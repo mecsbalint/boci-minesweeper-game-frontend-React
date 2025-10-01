@@ -3,32 +3,28 @@ export type GameStatus = {
     status: boolean
 };
 
+export type MatchLobbyDto = {
+    id: string,
+    emptySeats: number
+
+}
+
 export type PlayerMove = {
     coordinates: Coordinates
-    action_type: "REVEAL" | "FLAG"
+    actionType: "REVEAL" | "FLAG"
 };
-
-type Game = {
-    state: 'INITIALIZED' | 'STARTED' | 'FINISHED_LOST' | 'FINISHED_WON',
-    rows: number,
-    columns: number
-};
-
-export type GameResponse = Game & {
-    cells: Record<string, Cell>
-}
-
-export type GameModel = Game & {
-    cells: Map<Coordinates, Cell>
-}
 
 export type Coordinates = {
     x: number,
     y: number
 };
 
-export type CellState = "hidden" | "empty" | "flagged" | "mine" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8";
-
-export type Cell = {
-    state: CellState
+export type Match = {
+    state: GameState,
+    winnerId: number | null,
+    board: CellState[][]
 };
+
+export type GameState =  "CREATED" | "WAITING" | "READY" | "ACTIVE" | "FINISHED";
+
+export type CellState = "void" | "flagged" | "hidden" | "empty" | "mine" | "mine_activated" | "1" | "2" | "3" | "4" | "5" | "6" | "7" | "8" | `opponent_${string}`;
