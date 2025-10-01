@@ -44,7 +44,7 @@ function HomePage() {
     async function handleNewMPGameClick() {
         const responseObj = await createMPGame();
         if (responseObj.status === 201) {
-            navigate("/mp-game");
+            navigate("/mp-game/0");
         } else if (responseObj.status >= 400 && responseObj.status <= 599) {
             dispatch(responseObj.body as ExceptionResponseBody)
         }
@@ -55,7 +55,7 @@ function HomePage() {
     }
 
     function handleContinueMPGameClick() {
-        navigate("/mp-game");
+        navigate("/mp-game/0");
     }
 
     function handleJoinGameBtnClick() {

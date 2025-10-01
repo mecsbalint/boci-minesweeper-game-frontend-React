@@ -6,7 +6,7 @@ import { Match, PlayerMove } from "../types/Game";
 import GameField from "../components/GameField/GameField";
 
 function MPGamePage() {
-    const id = useParams().id as unknown as string;
+    const {id} = useParams();
     const {isLoggedIn, user} = useAuthContext();
     const [socket, setSocket] = useState<Socket | null>(null);
     const [match, setMatch] = useState<Match | null>(null);
@@ -16,18 +16,24 @@ function MPGamePage() {
         if (isLoggedIn === false) {
             navigate("/login");
         }
+    }, [isLoggedIn])
 
-        const socket = io("http://localhost:5000", {auth: {jwt: user?.jwt}});
+    useEffect(() => {
+        if (!user?.jwt || id === undefined) return;
+
+        const socket = io("http://localhost:5000", {auth: {jwt: user.jwt}});
         setSocket(socket);
-
+        
         socket.on("current_game_state", data => setMatch(data));
 
-        if (id) {
-            socket.emit("join_game", {id: id});
-        } else {
+        if (id === "0") {
             socket.emit("rejoin_game");
+        } else {
+            socket.emit("join_game", {id: id});
         }
-    }, []);
+
+        // return () => socket.disconnect();        
+    }, [user?.jwt, id]);
 
 
     async function clickHandler(playerMove: PlayerMove) {
