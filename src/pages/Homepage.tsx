@@ -5,6 +5,7 @@ import { GameStatus } from "../types/Game";
 import { useNavigate } from "react-router-dom";
 import { useErrorContext } from "../hooks/useErrorContext";
 import { ExceptionResponseBody } from "../types/Exception";
+import { useLogout } from "../hooks/useLogout";
 
 function HomePage() {
     const navigate = useNavigate()
@@ -12,23 +13,28 @@ function HomePage() {
     const {dispatch} = useErrorContext();
     const [SPGameInProgressState, setSPGameInProgressState] = useState<boolean>(false);
     const [MPGameInProgressState, setMPGameInProgressState] = useState<boolean>(false);
+    const logout = useLogout();
 
     useEffect(() => {
         if (isLoggedIn) {
             checkActiveSPGameStatus().then(responseObj => {
                 if (responseObj.status === 200) {
                     setSPGameInProgressState((responseObj.body as GameStatus).status)
+                } else if (responseObj.status === 404 && (responseObj.body as ExceptionResponseBody).map(error => error.code).includes("USER_NOT_FOUND")) {
+                    logout();
                 } else if (responseObj.status >= 400 && responseObj.status <= 599) {
                     dispatch(responseObj.body as ExceptionResponseBody)
                 }
-            })
+            });
             checkActiveMPGameStatus().then(responseObj => {
                 if (responseObj.status === 200) {
                     setMPGameInProgressState((responseObj.body as GameStatus).status)
+                } else if (responseObj.status === 404 && (responseObj.body as ExceptionResponseBody).map(error => error.code).includes("USER_NOT_FOUND")) {
+                    logout();
                 } else if (responseObj.status >= 400 && responseObj.status <= 599) {
                     dispatch(responseObj.body as ExceptionResponseBody)
                 }
-            })
+            });
         }
     }, [isLoggedIn])
 
