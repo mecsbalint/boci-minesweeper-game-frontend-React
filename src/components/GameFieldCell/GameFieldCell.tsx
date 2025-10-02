@@ -17,7 +17,7 @@ type CellColors = {
 type CellColorScheme = Map<0 | 1, CellColors>
 
 function GameFieldCell({gameState, coorX, coorY, cellState, processClickEvent}: GameFieldCellProps) {
-    const palletteHidden: CellColorScheme = new Map([
+    const palletteNeutral: CellColorScheme = new Map([
         [0, {base: "bg-neutral-400", hover: "hover:bg-neutral-300"}],
         [1, {base: "bg-neutral-200", hover: "hover:bg-neutral-100"}]
     ]);
@@ -34,8 +34,10 @@ function GameFieldCell({gameState, coorX, coorY, cellState, processClickEvent}: 
 
     function getColor() : CellColors {
         const index = (coorX + coorY) % 2 as 0 | 1
-        if (cellState === "hidden") {
-            return palletteHidden.get(index) as CellColors;
+        if (["mine", "mine_activated", "hidden"].includes(cellState)) {
+            return palletteNeutral.get(index) as CellColors;
+        } else if (cellState.includes("neutral")) {
+            return palletteNeutral.get(index) as CellColors;
         } else if (cellState.includes("opponent")) {
             return palletteOpponent.get(index) as CellColors
         } else {
