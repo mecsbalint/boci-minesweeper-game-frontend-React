@@ -20,7 +20,7 @@ function HomePage() {
             checkActiveSPGameStatus().then(responseObj => {
                 if (responseObj.status === 200) {
                     setSPGameInProgressState((responseObj.body as GameStatus).status)
-                } else if (responseObj.status === 404 && (responseObj.body as ExceptionResponseBody).map(error => error.code).includes("USER_NOT_FOUND")) {
+                } else if (responseObj.status === 401 || (responseObj.status === 404 && (responseObj.body as ExceptionResponseBody).map(error => error.code).includes("USER_NOT_FOUND"))) {
                     logout();
                 } else if (responseObj.status >= 400 && responseObj.status <= 599) {
                     dispatch(responseObj.body as ExceptionResponseBody)
@@ -29,7 +29,7 @@ function HomePage() {
             checkActiveMPGameStatus().then(responseObj => {
                 if (responseObj.status === 200) {
                     setMPGameInProgressState((responseObj.body as GameStatus).status)
-                } else if (responseObj.status === 404 && (responseObj.body as ExceptionResponseBody).map(error => error.code).includes("USER_NOT_FOUND")) {
+                } else if (responseObj.status === 401 || responseObj.status === 404 && (responseObj.body as ExceptionResponseBody).map(error => error.code).includes("USER_NOT_FOUND")) {
                     logout();
                 } else if (responseObj.status >= 400 && responseObj.status <= 599) {
                     dispatch(responseObj.body as ExceptionResponseBody)

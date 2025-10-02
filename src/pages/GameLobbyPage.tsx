@@ -26,7 +26,7 @@ function GameLobbyPage() {
     function handleClickEvent(event: React.MouseEvent) {
         event.preventDefault();
 
-        const id = (event.target as HTMLElement).dataset.id ?? "";
+        const id = (event.currentTarget as HTMLElement).dataset.id ?? "";
 
         navigate(`/mp-game/${id}`);
     }
@@ -34,8 +34,8 @@ function GameLobbyPage() {
     return (
         <div className={"grid justify-center gap-5"}>
             <h1>Available Matches</h1>
-            <ul onClick={handleClickEvent}>
-                {matches.map(match => <li key={match.id} data-id={match.id}>Available seats: {match.emptySeats}</li>)}
+            <ul>
+                {matches.map(match => <li key={match.id}>Available seats: {match.emptySeats} <button type="button" className="btn btn-primary" data-id={match.id} onClick={handleClickEvent}>JOIN</button></li>)}
             </ul>
         </div>
     )

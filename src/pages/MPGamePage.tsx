@@ -46,12 +46,12 @@ function MPGamePage() {
 
     return match !== null ? (
             <>
-            <div>
+            <div className="text-center">
+                <p className={match?.state === "WAITING" ? "" : "hidden"}>Waiting for players</p>
                 <GameField
                     match={match}
                     clickHandler={clickHandler}
                 />
-                <p className={match?.state === "WAITING" ? "" : "hidden"}>Waiting for players</p>
             </div>
             <div className={`text-center ${match.state === "FINISHED" ? "" : "hidden"}`}>
                 <p className="text-white p-5 text-xl">

@@ -49,7 +49,7 @@ function GameFieldCell({gameState, coorX, coorY, cellState, processClickEvent}: 
             data-x={coorX} 
             data-y={coorY} 
             data-state={cellState}
-            className={`w-10 h-10 ${color.base} ${color.hover} ${cellState === "hidden" && ["READY", "ACTIVE"].includes(gameState) ? "cursor-pointer" : ""}`}
+            className={`w-10 h-10 ${color.base} ${["READY", "ACTIVE"].includes(gameState) ? color.hover : ""} ${cellState === "hidden" && ["READY", "ACTIVE"].includes(gameState) ? "cursor-pointer" : ""}`}
             onClick={processClickEvent}
             onContextMenu={processClickEvent}
         >
