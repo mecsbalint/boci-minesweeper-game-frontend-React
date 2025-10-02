@@ -26,8 +26,8 @@ function GameFieldCell({gameState, coorX, coorY, cellState, processClickEvent}: 
         [1, {base: "bg-amber-200", hover: "hover:bg-amber-100"}]
     ]);
     const palletteOpponent: CellColorScheme = new Map([
-        [0, {base: "bg-purple-400", hover: "hover:bg-purple-300"}],
-        [1, {base: "bg-purple-200", hover: "hover:bg-purple-100"}]
+        [0, {base: "bg-red-400", hover: "hover:bg-red-300"}],
+        [1, {base: "bg-red-200", hover: "hover:bg-red-100"}]
     ]);
 
     const color: CellColors = getColor();
@@ -49,7 +49,7 @@ function GameFieldCell({gameState, coorX, coorY, cellState, processClickEvent}: 
             data-x={coorX} 
             data-y={coorY} 
             data-state={cellState}
-            className={`w-10 h-10 ${color.base} ${["READY", "ACTIVE"].includes(gameState) ? color.hover : ""} ${cellState === "hidden" && ["READY", "ACTIVE"].includes(gameState) ? "cursor-pointer" : ""}`}
+            className={`w-10 h-10 ${color.base} ${["hidden", "flagged"].includes(cellState) && ["READY", "ACTIVE"].includes(gameState) ? "cursor-pointer " + color.hover : ""}`}
             onClick={processClickEvent}
             onContextMenu={processClickEvent}
         >
