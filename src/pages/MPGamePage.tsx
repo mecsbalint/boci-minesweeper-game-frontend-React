@@ -4,6 +4,8 @@ import { io, Socket } from "socket.io-client"
 import { useAuthContext } from "../hooks/useAuthContext";
 import { Match, PlayerMove } from "../types/Game";
 import GameField from "../components/GameField/GameField";
+import { useErrorContext } from "../hooks/useErrorContext";
+import { ExceptionResponseBody } from "../types/Exception";
 
 function MPGamePage() {
     const {id} = useParams();
@@ -11,6 +13,7 @@ function MPGamePage() {
     const [socket, setSocket] = useState<Socket | null>(null);
     const [match, setMatch] = useState<Match | null>(null);
     const navigate = useNavigate();
+    const {dispatch} = useErrorContext();
 
     useEffect(() => {
         if (isLoggedIn === false) {
@@ -25,6 +28,12 @@ function MPGamePage() {
         setSocket(socket);
         
         socket.on("current_game_state", data => setMatch(data));
+
+        socket.on("error", (excBody: ExceptionResponseBody) => {
+            if (!excBody.map(exc => exc.code).includes("CACHE_CONCURRENCY_ERROR")) {
+                dispatch(excBody);
+            }
+        });
 
         if (id === "0") {
             socket.emit("rejoin_game");
