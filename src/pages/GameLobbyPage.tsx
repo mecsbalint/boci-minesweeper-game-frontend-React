@@ -21,6 +21,10 @@ function GameLobbyPage() {
         socket.on("lobby_update", data => setMatches(data));
 
         socket.emit("join_lobby");
+
+        return () => {
+            socket.close();
+        }
     }, []);
 
     function handleClickEvent(event: React.MouseEvent) {

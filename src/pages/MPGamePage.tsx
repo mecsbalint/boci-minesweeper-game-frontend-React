@@ -32,6 +32,9 @@ function MPGamePage() {
             socket.emit("join_game", {id: id});
         }
 
+        return () => {
+            socket.close();
+        }
     }, [user?.jwt, id]);
 
 
@@ -41,6 +44,7 @@ function MPGamePage() {
 
     function handleLeaveGameClick() {
         socket?.emit("leave_game");
+        socket?.close();
         navigate("/");
     }
 
