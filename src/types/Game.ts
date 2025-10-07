@@ -5,8 +5,11 @@ export type GameStatus = {
 
 export type MatchLobbyDto = {
     id: string,
-    emptySeats: number
-
+    emptySeats: number,
+    maxNumOfPlayers: number,
+    ownerName: string,
+    mapType: string,
+    gameType: string
 }
 
 export type PlayerMove = {
