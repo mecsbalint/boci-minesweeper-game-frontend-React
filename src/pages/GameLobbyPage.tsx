@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useErrorContext } from "../hooks/useErrorContext";
 import { ExceptionResponseBody } from "../types/Exception";
+import GameLobbyElement from "../components/GameLobbyElement.tsx/GameLobbyElement";
 
 function GameLobbyPage() {
     const navigate = useNavigate();
@@ -42,10 +43,19 @@ function GameLobbyPage() {
 
     return (
         <div className={"grid justify-center gap-5"}>
-            <h1>Available Matches</h1>
-            <ul>
-                {matches.map(match => <li key={match.id}>Available seats: {match.emptySeats} <button type="button" className="btn btn-primary" data-id={match.id} onClick={handleClickEvent}>JOIN</button></li>)}
-            </ul>
+            <table className="table table-zebra bg-base-300">
+                <thead className="tracking-wide">
+                    <th></th>
+                    <th>Creator</th> 
+                    <th>Game type</th> 
+                    <th>Map type</th> 
+                    <th>Players</th> 
+                    <th>Available seats</th> 
+                </thead>
+                <tbody>
+                    {matches.map((match, i) => <GameLobbyElement matchLobbyElement={match} clickHandler={handleClickEvent} isLast={matches.length -1 === i}/>)}
+                </tbody>
+            </table>
         </div>
     )
 }
