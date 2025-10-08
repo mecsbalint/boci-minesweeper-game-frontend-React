@@ -19,7 +19,6 @@ export const ErrorContext = createContext<ErrorContextType | null>(null);
 export function errorReducer(state: ErrorState, action: ErrorAction): ErrorState {
     switch (action.type) {
         case "UPDATE":
-            state.errors.push(...action.payload);
             return {isErrorActive: true, errors: [...state.errors, ...action.payload]}
             case "CLEAR":
             return {isErrorActive: false, errors: []}
@@ -35,7 +34,7 @@ export function ErrorContextProvider({children}: PropsWithChildren) {
                 dispatch({type: "CLEAR"});
             }, 5000)
         }
-    }, [state]);
+    }, [state.isErrorActive]);
 
     return (
         <ErrorContext.Provider value={{...state, dispatch}} >
