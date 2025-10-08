@@ -14,9 +14,9 @@ function SPGamePage() {
     const {addErrors} = useAddErrors();
 
     useEffect(() => {
-        if (isLoggedIn) {
+        if (isLoggedIn === true) {
             if (!match) {
-                getCurrentGame().then(response => {
+                getCurrentGame(user.jwt).then(response => {
                     if (response.status === 200) {
                         setMatch(response.body as Match);
                     } else if (response.status >= 400 && response.status <= 599) {
@@ -31,9 +31,10 @@ function SPGamePage() {
 
 
     async function handleNewGameClick() {
-        const responseObj = await createSPGame();
+        if (isLoggedIn !== true) return;
+        const responseObj = await createSPGame(user.jwt);
         if (responseObj.status === 201) {
-            getCurrentGame().then(response => {
+            getCurrentGame(user.jwt).then(response => {
                 if (response.status === 200) {
                     setMatch(response.body as Match);
                 } else if (response.status >= 400 && response.status <= 599) {
@@ -46,7 +47,8 @@ function SPGamePage() {
     }
 
     async function clickHandler(playerMove: PlayerMove) : Promise<void> {
-        const responseObj = await makePlayerMove(playerMove);
+        if (isLoggedIn !== true) return;
+        const responseObj = await makePlayerMove(user.jwt, playerMove);
         if (responseObj.status === 200) {
             setMatch(responseObj.body as Match);
         } else if (responseObj.status >= 400 && responseObj.status <= 599) {

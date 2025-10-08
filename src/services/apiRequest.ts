@@ -1,11 +1,11 @@
 import { ExceptionResponseBody } from "../types/Exception";
-import { User } from "../types/User";
 
 type ApiRequestParams = {
   url: string,
   method?: "GET" | "POST" | "DELETE" | "PUT" | "PATCH" | "HEAD",
   body?: string | FormData,
-  headers?: {[key: string]: string}
+  headers?: {[key: string]: string},
+  jwt?: string | null
 };
 
 export type ApiResponse<T = any> = {
@@ -17,13 +17,9 @@ export async function apiRequest<T = void>({
   url, 
   method = "GET", 
   body,
-  headers = {}
+  headers = {},
+  jwt = null
 } : ApiRequestParams) : Promise<ApiResponse<T>> {
-
-  let jwt : string | null;
-  const localStorageItem : string | null = localStorage.getItem("bmgUser");
-  
-  jwt = localStorageItem === null || localStorageItem === "null" ? null : (JSON.parse(localStorageItem) as User).jwt;
 
   const response = await fetch(url, {
     method,

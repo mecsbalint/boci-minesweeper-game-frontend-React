@@ -9,15 +9,15 @@ import useAddErrors from "../hooks/useAddErrors";
 
 function HomePage() {
     const navigate = useNavigate()
-    const {isLoggedIn} = useAuthContext();
+    const {isLoggedIn, user} = useAuthContext();
     const {addErrors} = useAddErrors();
     const [SPGameInProgressState, setSPGameInProgressState] = useState<boolean>(false);
     const [MPGameInProgressState, setMPGameInProgressState] = useState<boolean>(false);
     const logout = useLogout();
 
     useEffect(() => {
-        if (isLoggedIn) {
-            checkActiveSPGameStatus().then(responseObj => {
+        if (isLoggedIn === true) {
+            checkActiveSPGameStatus(user.jwt).then(responseObj => {
                 if (responseObj.status === 200) {
                     setSPGameInProgressState((responseObj.body as GameStatus).status)
                 } else if (responseObj.status === 401 || (responseObj.status === 404 && (responseObj.body as ExceptionResponseBody).map(error => error.code).includes("USER_NOT_FOUND"))) {
@@ -26,7 +26,7 @@ function HomePage() {
                     addErrors(responseObj.body as ExceptionResponseBody)
                 }
             });
-            checkActiveMPGameStatus().then(responseObj => {
+            checkActiveMPGameStatus(user.jwt).then(responseObj => {
                 if (responseObj.status === 200) {
                     setMPGameInProgressState((responseObj.body as GameStatus).status)
                 } else if (responseObj.status === 401 || responseObj.status === 404 && (responseObj.body as ExceptionResponseBody).map(error => error.code).includes("USER_NOT_FOUND")) {
@@ -39,7 +39,8 @@ function HomePage() {
     }, [isLoggedIn])
 
     async function handleNewSPGameClick() {
-        const responseObj = await createSPGame();
+        if (isLoggedIn !== true) return;
+        const responseObj = await createSPGame(user.jwt);
         if (responseObj.status === 201) {
             navigate("/sp-game");
         } else if (responseObj.status >= 400 && responseObj.status <= 599) {
@@ -48,7 +49,8 @@ function HomePage() {
     }
 
     async function handleNewMPGameClick() {
-        const responseObj = await createMPGame();
+        if (isLoggedIn !== true) return;
+        const responseObj = await createMPGame(user.jwt);
         if (responseObj.status === 201) {
             navigate("/mp-game/0");
         } else if (responseObj.status >= 400 && responseObj.status <= 599) {

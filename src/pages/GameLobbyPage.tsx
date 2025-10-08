@@ -3,7 +3,6 @@ import { io, Socket } from "socket.io-client";
 import { MatchLobbyDto } from "../types/Game";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
-import { ExceptionResponseBody } from "../types/Exception";
 import GameLobbyElement from "../components/GameLobbyElement.tsx/GameLobbyElement";
 import useAddErrors from "../hooks/useAddErrors";
 

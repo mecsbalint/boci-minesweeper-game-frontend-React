@@ -8,23 +8,26 @@ type AuthAction =
 
 type AuthContextType = AuthState & {
     dispatch: React.Dispatch<AuthAction>
-}
+};
 
-type AuthState = {
-    user: User | null,
-    isLoggedIn: boolean | null | "null"
+type AuthState = 
+| {
+    user: User,
+    isLoggedIn: true
 } 
+| {
+    user: null,
+    isLoggedIn: false | null | "null"
+};
 
 export const AuthContext = createContext<AuthContextType | null>(null);
 
 export function authReducer(state : AuthState, action : AuthAction) {
     switch (action.type) {
         case "LOGIN":
-            return {user: action.payload, isLoggedIn: true}
+            return {user: action.payload, isLoggedIn: true as true}
         case "LOGOUT":
-            return {user: null, isLoggedIn: false}
-        default:
-            return state;
+            return {user: null, isLoggedIn: false as false}
     }
 }
 
