@@ -29,12 +29,14 @@ export function ErrorContextProvider({children}: PropsWithChildren) {
     const [state, dispatch] = useReducer(errorReducer, {errors: [], isErrorActive: false} as ErrorState);
 
     useEffect(() => {
-        if (state.isErrorActive) {
-            setTimeout(() => {
-                dispatch({type: "CLEAR"});
-            }, 5000)
-        }
-    }, [state.isErrorActive]);
+        if (!state.isErrorActive) return;
+
+        const timer = setTimeout(() => {
+            dispatch({type: "CLEAR"});
+        }, 1000);
+
+        return () => clearTimeout(timer);
+    }, [state]);
 
     return (
         <ErrorContext.Provider value={{...state, dispatch}} >
