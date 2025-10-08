@@ -2,16 +2,16 @@ import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
 import { useEffect, useState } from "react";
 import GameField from "../components/GameField/GameField";
-import { CellState, Coordinates, Match, PlayerMove } from "../types/Game";
+import { Match, PlayerMove } from "../types/Game";
 import { createSPGame, getCurrentGame, makePlayerMove } from "../services/gameService";
-import { useErrorContext } from "../hooks/useErrorContext";
 import { ExceptionResponseBody } from "../types/Exception";
+import useAddErrors from "../hooks/useAddErrors";
 
 function SPGamePage() {
     const navigate = useNavigate();
     const {isLoggedIn, user} = useAuthContext();
     const [match, setMatch] = useState<Match | null>(null);
-    const {dispatch} = useErrorContext()
+    const {addErrors} = useAddErrors();
 
     useEffect(() => {
         if (isLoggedIn) {
@@ -20,7 +20,7 @@ function SPGamePage() {
                     if (response.status === 200) {
                         setMatch(response.body as Match);
                     } else if (response.status >= 400 && response.status <= 599) {
-                        dispatch(response.body as ExceptionResponseBody)
+                        addErrors(response.body as ExceptionResponseBody);
                     }
                 });
             }
@@ -37,11 +37,11 @@ function SPGamePage() {
                 if (response.status === 200) {
                     setMatch(response.body as Match);
                 } else if (response.status >= 400 && response.status <= 599) {
-                    dispatch(response.body as ExceptionResponseBody)
+                    addErrors(response.body as ExceptionResponseBody);
                 }
             });
         } else if (responseObj.status >= 400 && responseObj.status <= 599) {
-            dispatch(responseObj.body as ExceptionResponseBody)
+            addErrors(responseObj.body as ExceptionResponseBody);
         }
     }
 
@@ -50,7 +50,7 @@ function SPGamePage() {
         if (responseObj.status === 200) {
             setMatch(responseObj.body as Match);
         } else if (responseObj.status >= 400 && responseObj.status <= 599) {
-            dispatch(responseObj.body as ExceptionResponseBody)
+            addErrors(responseObj.body as ExceptionResponseBody);
         }
     }
 

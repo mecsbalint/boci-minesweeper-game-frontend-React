@@ -3,16 +3,16 @@ import { io, Socket } from "socket.io-client";
 import { MatchLobbyDto } from "../types/Game";
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from "../hooks/useAuthContext";
-import { useErrorContext } from "../hooks/useErrorContext";
 import { ExceptionResponseBody } from "../types/Exception";
 import GameLobbyElement from "../components/GameLobbyElement.tsx/GameLobbyElement";
+import useAddErrors from "../hooks/useAddErrors";
 
 function GameLobbyPage() {
     const navigate = useNavigate();
     const [socket, setSocket] = useState<Socket | null>(null);
     const [matches, setMatches] = useState<MatchLobbyDto[]>([]);
     const {isLoggedIn, user} = useAuthContext();
-    const {dispatch} = useErrorContext();
+    const {addErrors} = useAddErrors();
 
     useEffect(() => {
         if (isLoggedIn === false) {
@@ -24,7 +24,7 @@ function GameLobbyPage() {
 
         socket.on("lobby_update", data => setMatches(data));
 
-        socket.on("error", data => dispatch(data as ExceptionResponseBody));
+        socket.on("error", data => addErrors(data));
 
         socket.emit("join_lobby");
 
