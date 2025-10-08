@@ -3,14 +3,14 @@ import { useAuthContext } from "../hooks/useAuthContext";
 import { checkActiveMPGameStatus, checkActiveSPGameStatus, createMPGame, createSPGame } from "../services/gameService";
 import { GameStatus } from "../types/Game";
 import { useNavigate } from "react-router-dom";
-import { useErrorContext } from "../hooks/useErrorContext";
 import { ExceptionResponseBody } from "../types/Exception";
 import { useLogout } from "../hooks/useLogout";
+import useAddErrors from "../hooks/useAddErrors";
 
 function HomePage() {
     const navigate = useNavigate()
     const {isLoggedIn} = useAuthContext();
-    const {dispatch} = useErrorContext();
+    const {addErrors} = useAddErrors();
     const [SPGameInProgressState, setSPGameInProgressState] = useState<boolean>(false);
     const [MPGameInProgressState, setMPGameInProgressState] = useState<boolean>(false);
     const logout = useLogout();
@@ -23,7 +23,7 @@ function HomePage() {
                 } else if (responseObj.status === 401 || (responseObj.status === 404 && (responseObj.body as ExceptionResponseBody).map(error => error.code).includes("USER_NOT_FOUND"))) {
                     logout();
                 } else if (responseObj.status >= 400 && responseObj.status <= 599) {
-                    dispatch(responseObj.body as ExceptionResponseBody)
+                    addErrors(responseObj.body as ExceptionResponseBody)
                 }
             });
             checkActiveMPGameStatus().then(responseObj => {
@@ -32,7 +32,7 @@ function HomePage() {
                 } else if (responseObj.status === 401 || responseObj.status === 404 && (responseObj.body as ExceptionResponseBody).map(error => error.code).includes("USER_NOT_FOUND")) {
                     logout();
                 } else if (responseObj.status >= 400 && responseObj.status <= 599) {
-                    dispatch(responseObj.body as ExceptionResponseBody)
+                    addErrors(responseObj.body as ExceptionResponseBody)
                 }
             });
         }
@@ -43,7 +43,7 @@ function HomePage() {
         if (responseObj.status === 201) {
             navigate("/sp-game");
         } else if (responseObj.status >= 400 && responseObj.status <= 599) {
-            dispatch(responseObj.body as ExceptionResponseBody)
+            addErrors(responseObj.body as ExceptionResponseBody)
         }
     }
 
@@ -52,7 +52,7 @@ function HomePage() {
         if (responseObj.status === 201) {
             navigate("/mp-game/0");
         } else if (responseObj.status >= 400 && responseObj.status <= 599) {
-            dispatch(responseObj.body as ExceptionResponseBody)
+            addErrors(responseObj.body as ExceptionResponseBody)
         }
     }
 

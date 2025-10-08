@@ -6,7 +6,9 @@ type ErrorState = {
     isErrorActive: boolean
 };
 
-type ErrorAction = ExceptionResponseBody;
+type ErrorAction =
+    | {type: "UPDATE", payload: ExceptionResponseBody}
+    | {type: "CLEAR"};
 
 type ErrorContextType = ErrorState & {
     dispatch: React.Dispatch<ErrorAction>
@@ -15,18 +17,25 @@ type ErrorContextType = ErrorState & {
 export const ErrorContext = createContext<ErrorContextType | null>(null);
 
 export function errorReducer(state: ErrorState, action: ErrorAction): ErrorState {
-    return {isErrorActive: action.length > 0, errors: action}
+    switch (action.type) {
+        case "UPDATE":
+            return {isErrorActive: true, errors: [...state.errors, ...action.payload]}
+            case "CLEAR":
+            return {isErrorActive: false, errors: []}
+    }
 }
 
 export function ErrorContextProvider({children}: PropsWithChildren) {
     const [state, dispatch] = useReducer(errorReducer, {errors: [], isErrorActive: false} as ErrorState);
 
     useEffect(() => {
-        if (state.isErrorActive) {
-            setTimeout(() => {
-                dispatch([]);
-            }, 5000)
-        }
+        if (!state.isErrorActive) return;
+
+        const timer = setTimeout(() => {
+            dispatch({type: "CLEAR"});
+        }, 1000);
+
+        return () => clearTimeout(timer);
     }, [state]);
 
     return (
