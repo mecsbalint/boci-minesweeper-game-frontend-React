@@ -65,25 +65,29 @@ function MPGamePage() {
     }
 
     return match !== null ? (
-            <>
-            <div className="text-center">
-                <p className={match?.state === "WAITING" ? "" : "hidden"}>Waiting for players</p>
-                <GameField
-                    match={match}
-                    clickHandler={gameFieldClickHandler}
-                />
-            </div>
-            <div className={`text-center ${match.state === "FINISHED" ? "" : "hidden"}`}>
-                <p className="text-white p-5 text-xl">
-                    {match.winnerId === user?.id ? "You Won" : "You Lost"}
-                </p>
-                <button type="button" className="btn btn-primary" onClick={handleLeaveGameClick}>Leave Game</button>
-            </div>
-            <div>
-                <p>Game Chat</p>
+            <div className="grid grid-cols-3 grid-rows-15 gap-5">
+                <div className="col-span-2 text-center">
+                    <p className={`${match?.state === "WAITING" ? "" : "hidden"}`}>Waiting for players</p>
+                </div>
+                <div></div>
+                <div className="col-span-2 row-span-14">
+                    <div className="text-center">
+                        <GameField
+                            match={match}
+                            clickHandler={gameFieldClickHandler}
+                        />
+                    </div>
+                    <div className={`text-center ${match.state === "FINISHED" ? "" : "hidden"}`}>
+                        <p className="text-white p-5 text-xl">
+                            {match.winnerId === user?.id ? "You Won" : "You Lost"}
+                        </p>
+                        <button type="button" className="btn btn-primary" onClick={handleLeaveGameClick}>Leave Game</button>
+                    </div>
+                </div>
+            <div className="row-span-8">
                 <ChatBox onSendMessage={handleChatInput} chat={chat}/>
             </div>
-            </>
+            </div>
         ) : (
             <div>
                 Loading
