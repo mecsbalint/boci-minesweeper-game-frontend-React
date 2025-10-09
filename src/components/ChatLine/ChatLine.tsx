@@ -10,7 +10,7 @@ function ChatLine({sender, content, isStart}: ChatLineProps) {
     const {user} = useAuthContext();
 
     return (
-        <div className={`chat chat-${user?.name === sender ? "end" : "start"}`}>
+        <div className={`chat ${user?.name === sender ? "chat-end" : "chat-start"}`}>
             <div className={`chat-header ${!isStart || user?.name === sender ? "hidden" : ""}`}>
                 {sender}
             </div>
