@@ -71,13 +71,17 @@ function HomePage() {
     }
 
     return (
-        <div className={`grid justify-center gap-5 ${isLoggedIn ? "" : "hidden"}`}>
-            <button type="button" className="btn btn-primary" onClick={handleNewSPGameClick}>New Single Player Game</button>
-            <button type="button" className={`btn btn-primary ${SPGameInProgressState ? "" : "hidden"}`} onClick={handleContinueSPGameClick}>Continue Single Player Game</button>
-            <button type="button" className="btn btn-primary" onClick={handleJoinGameBtnClick}>Join Multiplayer Game</button>
-            <button type="button" className="btn btn-primary" onClick={handleNewMPGameClick}>New Multiplayer Game</button>
-            <button type="button" className={`btn btn-primary ${MPGameInProgressState ? "" : "hidden"}`} onClick={handleContinueMPGameClick}>Continue Multiplayer Game</button>
-        </div>
+        <>
+            <div className={`grid grid-cols-1 h-50 justify-center gap-5 ${isLoggedIn ? "" : "hidden"}`}>
+                <button type="button" className="btn btn-primary" onClick={handleNewSPGameClick}>New Single Player Game</button>
+                <button type="button" className={`btn btn-primary ${SPGameInProgressState ? "" : "hidden"}`} onClick={handleContinueSPGameClick}>Continue Single Player Game</button>
+                <button type="button" className="btn btn-primary" onClick={handleJoinGameBtnClick}>Join Multiplayer Game</button>
+                <button type="button" className="btn btn-primary" onClick={handleNewMPGameClick}>New Multiplayer Game</button>
+                <button type="button" className={`btn btn-primary ${MPGameInProgressState ? "" : "hidden"}`} onClick={handleContinueMPGameClick}>Continue Multiplayer Game</button>
+            </div>
+            <div>
+            </div>
+        </>
     )
 }
 

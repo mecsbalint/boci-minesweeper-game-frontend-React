@@ -41,8 +41,8 @@ function GameLobbyPage() {
     }
 
     return (
-        <div className={"grid justify-center gap-5"}>
-            <table className="table table-zebra bg-base-300">
+        <div className={"flex items-start"}>
+            <table className="table table-zebra bg-base-300 h-auto">
                 <thead className="tracking-wide">
                     <th></th>
                     <th>Creator</th> 
