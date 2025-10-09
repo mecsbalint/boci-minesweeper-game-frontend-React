@@ -65,11 +65,10 @@ function MPGamePage() {
     }
 
     return match !== null ? (
-            <div className="grid grid-cols-3 grid-rows-15 gap-5">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 <div className="col-span-2 text-center">
                     <p className={`${match?.state === "WAITING" ? "" : "hidden"}`}>Waiting for players</p>
                 </div>
-                <div></div>
                 <div className="col-span-2 row-span-14">
                     <div className="text-center">
                         <GameField
@@ -84,9 +83,9 @@ function MPGamePage() {
                         <button type="button" className="btn btn-primary" onClick={handleLeaveGameClick}>Leave Game</button>
                     </div>
                 </div>
-            <div className="row-span-8">
-                <ChatBox onSendMessage={handleChatInput} chat={chat}/>
-            </div>
+                <div className="col-span-2 lg:col-span-1">
+                    <ChatBox onSendMessage={handleChatInput} chat={chat}/>
+                </div>
             </div>
         ) : (
             <div>

@@ -10,7 +10,7 @@ function Layout() {
                 <CustomNavBar />
             </div>
             <div className="flex justify-center items-center bg-blue-400 rounded-box pt-10 pb-10">
-                <div className="w-400 h-200 flex justify-center">
+                <div className="w-400 min-h-200 flex justify-center">
                     <Outlet />
                 </div>
             </div>
