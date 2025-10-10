@@ -57,21 +57,20 @@ function SPGamePage() {
     }
 
     return match !== null ? (
-            <>
-            <div>
-                <GameField
-                    match={match}
-                    clickHandler={clickHandler}
-                />
+            <div className="grid grid-cols-1 h-min">
+                <div>
+                    <GameField
+                        match={match}
+                        clickHandler={clickHandler}
+                    />
+                </div>
+                <div className={`text-center ${match.state === "FINISHED" ? "" : "hidden"}`}>
+                    <p className="text-white p-5 text-xl">
+                        {match.winnerId === user?.id ? "You Won" : "You Lost"}
+                    </p>
+                    <button type="button" className="btn btn-primary" onClick={handleNewGameClick}>New Game</button>
+                </div>
             </div>
-            <div className={`text-center ${match.state === "FINISHED" ? "" : "hidden"}`}>
-                <p className="text-white p-5 text-xl">
-                    {match.winnerId === user?.id ? "You Won" : "You Lost"}
-                </p>
-                <button type="button" className="btn btn-primary" onClick={handleNewGameClick}>New Game</button>
-            </div>
-            </>
-
         ) : (
             <div>
                 Loading
