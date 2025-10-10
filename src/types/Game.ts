@@ -22,10 +22,15 @@ export type Coordinates = {
     y: number
 };
 
+type Scoreboard = {
+    
+}
+
 export type Match = {
     state: GameState,
     winnerId: number | null,
     board: CellState[][]
+    scoreboard: {[i: string]: number}
 };
 
 export type GameState =  "CREATED" | "WAITING" | "READY" | "ACTIVE" | "FINISHED";
