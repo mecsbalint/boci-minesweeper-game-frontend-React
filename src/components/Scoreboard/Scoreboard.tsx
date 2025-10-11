@@ -1,3 +1,4 @@
+import ScoreboardElement from "../ScoreboardElement/ScoreboardElement";
 
 type ScoreboardProps = {
     scoreboard: {[i: string]: number}
@@ -5,21 +6,13 @@ type ScoreboardProps = {
 
 function Scoreboard({scoreboard}: ScoreboardProps) {
     const entries = Object.entries(scoreboard);
-    entries.sort((a, b) => b[1] - a[1]);
+    entries.sort();
     
     return (
-        <table className="table bg-white">
-            <thead>
-                <tr>
-                    <th></th>
-                    <th>Player</th>
-                    <th>Score</th>
-                </tr>
-            </thead>
-            <tbody>
-                {entries.map((entry, i) => <tr key={i}><td>{i + 1}</td><td>{entry[0]}</td><td>{entry[1]}</td></tr>)}
-            </tbody>
-        </table>
+        <div className="stats shadow bg-white
+">
+            {entries.map(entry => <ScoreboardElement scoreboardElement={entry}/>)}            
+        </div>
     )
 }
 
