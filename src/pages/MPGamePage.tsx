@@ -7,6 +7,7 @@ import GameField from "../components/GameField/GameField";
 import { ExceptionResponseBody } from "../types/Exception";
 import useAddErrors from "../hooks/useAddErrors";
 import ChatBox from "../components/ChatBox/ChatBox";
+import Scoreboard from "../components/Scoreboard/Scoreboard";
 
 function MPGamePage() {
     const {id} = useParams();
@@ -66,8 +67,14 @@ function MPGamePage() {
 
     return match !== null ? (
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                <div className="col-span-2 text-center">
-                    <p className={`${match?.state === "WAITING" ? "" : "hidden"}`}>Waiting for players</p>
+                <div className="col-span-2 flex justify-center items-center">
+                    {match?.state === "WAITING" ? (
+                        <div className="text-center">
+                            <p className={`${match?.state === "WAITING" ? "" : "hidden"}`}>Waiting for players</p>
+                        </div>
+                    ) : (
+                        <Scoreboard scoreboard={match.scoreboard} />
+                    )}
                 </div>
                 <div className="col-span-2 row-span-14">
                     <div className="text-center">

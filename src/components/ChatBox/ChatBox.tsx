@@ -32,7 +32,7 @@ function ChatBox({chat, onSendMessage}: ChatBoxProps) {
                     {chat.map((message, i) => <ChatLine isStart={chat[i-1] === undefined || chat[i-1][0] !== message[0]} sender={message[0]} content={message[1]}/>)}
                 </div>
                 <label className="input rounded-xl">
-                    <input title="chat input" type="text" value={message} onChange={event => {setMessage(event.target.value)}} onKeyDown={handleOnKeyDown}></input>
+                    <input title="chat input" type="text" placeholder="Aa" value={message} onChange={event => {setMessage(event.target.value)}} onKeyDown={handleOnKeyDown}></input>
                 </label>
             </div>
                 
