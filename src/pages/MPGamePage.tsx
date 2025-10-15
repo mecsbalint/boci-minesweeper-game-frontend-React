@@ -34,8 +34,12 @@ function MPGamePage() {
         socket.on("chat", data => setChat(data))
 
         socket.on("error", (excBody: ExceptionResponseBody) => {
-            if (!excBody.map(exc => exc.code).includes("CACHE_CONCURRENCY_ERROR")) {
+            const errorCodes = excBody.map(exc => exc.code)
+            if (!errorCodes.includes("CACHE_CONCURRENCY_ERROR")) {
                 addErrors(excBody);
+                if (errorCodes.includes("CACHE_ELEMENT_NOT_FOUND_ERROR")) {
+                    navigate("/");
+                }
             }
         });
 
