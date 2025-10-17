@@ -22,10 +22,6 @@ export type Coordinates = {
     y: number
 };
 
-type Scoreboard = {
-    
-}
-
 export type Match = {
     state: GameState,
     winnerId: number | null,

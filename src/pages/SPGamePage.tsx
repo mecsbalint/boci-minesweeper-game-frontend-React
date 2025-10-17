@@ -53,6 +53,9 @@ function SPGamePage() {
             setMatch(responseObj.body as Match);
         } else if (responseObj.status >= 400 && responseObj.status <= 599) {
             addErrors(responseObj.body as ExceptionResponseBody);
+            if ((responseObj.body as ExceptionResponseBody).map(exc => exc.code).includes("CACHE_ELEMENT_NOT_FOUND_ERROR")) {
+                navigate("/");
+            }
         }
     }
 
