@@ -21,7 +21,10 @@ function GameLobbyPage() {
         const socket = io("/", {auth: {jwt: user?.jwt}});
         setSocket(socket);
 
-        socket.on("lobby_update", data => setMatches(data));
+        socket.on("lobby_update", (data: MatchLobbyDto[]) => {
+            const dataFiltered = data.filter(matchLobbyDto => !matchLobbyDto.participantIds.includes((user?.id as number)))
+            setMatches(dataFiltered);
+        });
 
         socket.on("error", data => addErrors(data));
 
