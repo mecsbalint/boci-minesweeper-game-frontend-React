@@ -10,6 +10,7 @@ export type MatchLobbyDto = {
     ownerName: string,
     mapType: string,
     gameType: string
+    participantIds: number[]
 }
 
 export type PlayerMove = {
