@@ -39,6 +39,8 @@ function MPGamePage() {
                 addErrors(excBody);
                 if (errorCodes.includes("CACHE_ELEMENT_NOT_FOUND_ERROR")) {
                     navigate("/");
+                } else if (errorCodes.includes("PLAYER_CANNOT_JOIN")) {
+                    navigate("/lobby")
                 }
             }
         });
